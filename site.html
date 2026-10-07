@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Психолог · Елена Вайс | Сайт с онлайн-записью</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0b0e14;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --accent: #7c5cff;
+      --accent-soft: #b7a4ff;
+      --neon-green: #00ff88;
+      --neon-green-soft: rgba(0, 255, 136, 0.35);
+      --neon-green-glow: rgba(0, 255, 136, 0.65);
+      --text-primary: #ffffff;
+      --text-secondary: #b0b8d0;
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      --radius-card: 32px;
+      --radius-btn: 60px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.5;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* ===== ФОН: РАЗМЫТЫЙ ОКЕАН В ШТОРМ ===== */
+    .ocean-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background-image: url('https://images.unsplash.com/photo-1505144808419-1957a94ca61e?w=1920&q=80&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      filter: blur(14px) brightness(0.55) saturate(1.1);
+      transform: scale(1.1);
+      will-change: transform;
+    }
+
+    .ocean-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124, 92, 255, 0.18), transparent 55%),
+        radial-gradient(circle at 85% 90%, rgba(60, 90, 200, 0.15), transparent 55%),
+        linear-gradient(180deg, rgba(11, 14, 20, 0.75) 0%, rgba(11, 14, 20, 0.85) 50%, rgba(11, 14, 20, 0.92) 100%);
+      pointer-events: none;
+    }
+
+    .ocean-noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.05;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #1a1e2b; }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; transition: background 0.3s; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--neon-green); }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    section { padding: 100px 0; position: relative; }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.8s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .glass-card:hover {
+      border-color: var(--neon-green);
+      box-shadow: 0 30px 60px -15px var(--neon-green-glow);
+    }
+
+    /* КНОПКИ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 36px;
+      border-radius: var(--radius-btn);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 12px 30px -8px rgba(124, 92, 255, 0.5);
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, #a18aff, #7c5cff);
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: -1;
+    }
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      background: var(--neon-green);
+      color: #052014;
+      box-shadow: 0 0 0 2px var(--neon-green),
+                  0 0 25px var(--neon-green-glow),
+                  0 20px 40px -8px var(--neon-green-glow);
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    }
+    .btn-primary:hover::before { opacity: 0; }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+    .btn-outline:hover {
+      border-color: var(--neon-green);
+      color: var(--neon-green);
+      background: rgba(0, 255, 136, 0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 0 20px var(--neon-green-glow),
+                  inset 0 0 20px rgba(0, 255, 136, 0.15);
+      text-shadow: 0 0 10px var(--neon-green-glow);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124, 92, 255, 0.25) 0%, transparent 70%);
+      top: -200px; right: -150px;
+      border-radius: 50%; z-index: 0;
+      filter: blur(60px);
+      animation: float 12s infinite alternate;
+    }
+    .hero-bg-glow.second {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(157, 133, 255, 0.2) 0%, transparent 70%);
+      bottom: -150px; left: -100px;
+      top: auto; right: auto;
+      animation: float 15s infinite alternate-reverse;
+    }
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.1); }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    .hero-content h1 span {
+      background: linear-gradient(135deg, #b7a4ff, #7c5cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(124, 92, 255, 0.4));
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 90%;
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+    }
+    .promo-badge {
+      display: inline-block;
+      background: rgba(124, 92, 255, 0.2);
+      border: 1px solid rgba(124, 92, 255, 0.5);
+      border-radius: 40px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent-soft);
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+      animation: pulse 2s infinite;
+      transition: all 0.3s ease;
+    }
+    .promo-badge:hover {
+      color: var(--neon-green);
+      border-color: var(--neon-green);
+      background: rgba(0, 255, 136, 0.12);
+      box-shadow: 0 0 20px var(--neon-green-glow);
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(124, 92, 255, 0.4); }
+      70% { box-shadow: 0 0 0 12px rgba(124, 92, 255, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(124, 92, 255, 0); }
+    }
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .hero-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      font-weight: 500;
+    }
+    .hero-menu a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s, text-shadow 0.3s;
+      position: relative;
+      font-size: 1rem;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+    .hero-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px; left: 0;
+      width: 0; height: 2px;
+      background: var(--neon-green);
+      transition: width 0.3s;
+      box-shadow: 0 0 10px var(--neon-green-glow);
+    }
+    .hero-menu a:hover {
+      color: var(--neon-green);
+      text-shadow: 0 0 15px var(--neon-green-glow), 0 2px 10px rgba(0, 0, 0, 0.6);
+    }
+    .hero-menu a:hover::after { width: 100%; }
+
+    .hero-image {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+    .hero-image img {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 40px;
+      object-fit: cover;
+      aspect-ratio: 4/5;
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+      position: relative;
+      z-index: 2;
+      filter: saturate(1.05) contrast(1.02);
+    }
+    .hero-image img:hover {
+      transform: scale(1.02) translateY(-8px);
+      border-color: var(--neon-green);
+      box-shadow: 0 50px 90px -20px var(--neon-green-glow),
+                  0 0 40px var(--neon-green-soft);
+    }
+    .photo-glow {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 30% 30%, rgba(124, 92, 255, 0.4), transparent 70%);
+      filter: blur(40px);
+      z-index: 1;
+      top: 0; left: 0;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .about-text h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    .about-text h2 i { color: var(--accent); margin-right: 12px; transition: color 0.3s; }
+    .about-text h2:hover i { color: var(--neon-green); }
+    .about-text p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+    }
+    .stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+    }
+    .stat-item .number {
+      font-size: 2.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #b7a4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      filter: drop-shadow(0 2px 15px rgba(0, 0, 0, 0.5));
+      transition: filter 0.3s;
+    }
+    .stat-item:hover .number {
+      filter: drop-shadow(0 0 20px var(--neon-green-glow));
+    }
+    .stat-item .label {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 8px;
+      transition: color 0.3s;
+    }
+    .stat-item:hover .label { color: var(--neon-green); }
+    .about-image {
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7);
+      aspect-ratio: 4/5;
+      transition: box-shadow 0.5s ease, border-color 0.5s ease;
+    }
+    .about-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 40px;
+      transition: transform 0.6s ease;
+      display: block;
+    }
+    .about-image:hover {
+      box-shadow: 0 30px 60px -20px var(--neon-green-glow),
+                  0 0 40px var(--neon-green-soft);
+    }
+    .about-image:hover img { transform: scale(1.03); }
+
+    /* SERVICES */
+    .services-section {
+      background: linear-gradient(180deg, transparent, rgba(124, 92, 255, 0.04), transparent);
+    }
+    .services-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .services-header h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    .services-header p {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto;
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .service-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .service-item {
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      border-radius: 28px;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .service-item:hover, .service-item.selected {
+      border-color: var(--neon-green);
+      background: rgba(0, 255, 136, 0.08);
+      transform: translateX(8px);
+      box-shadow: 0 0 20px var(--neon-green-soft);
+    }
+    .service-item.selected {
+      box-shadow: 0 0 0 2px var(--neon-green),
+                  0 20px 40px -15px var(--neon-green-glow);
+    }
+    .service-item:hover .service-icon,
+    .service-item.selected .service-icon {
+      color: var(--neon-green);
+      background: rgba(0, 255, 136, 0.15);
+    }
+    .service-item:hover .service-price,
+    .service-item.selected .service-price {
+      color: var(--neon-green);
+      text-shadow: 0 0 10px var(--neon-green-glow);
+    }
+    .service-icon {
+      width: 60px; height: 60px;
+      background: rgba(124, 92, 255, 0.2);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--accent-soft);
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .service-info h3 { font-size: 1.3rem; margin-bottom: 6px; font-weight: 600; transition: color 0.3s; }
+    .service-item:hover .service-info h3 { color: var(--neon-green); }
+    .service-info p { color: var(--text-secondary); font-size: 0.95rem; }
+    .service-price {
+      margin-left: auto;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--accent-soft);
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+
+    .calendar-wrapper {
+      padding: 32px;
+      border-radius: 32px;
+      background: rgba(20, 24, 36, 0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .calendar-wrapper:hover {
+      border-color: var(--neon-green);
+      box-shadow: 0 0 30px var(--neon-green-soft);
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+    .calendar-header h3 { font-size: 1.4rem; font-weight: 600; }
+    .calendar-nav { display: flex; gap: 8px; }
+    .calendar-nav button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .calendar-nav button:hover {
+      background: var(--neon-green);
+      border-color: var(--neon-green);
+      color: #052014;
+      box-shadow: 0 0 20px var(--neon-green-glow);
+      transform: scale(1.1);
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .calendar-day-name {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 8px 0;
+      text-transform: uppercase;
+    }
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+    .calendar-day:hover:not(.disabled) {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--neon-green);
+      border-color: var(--neon-green);
+      transform: scale(1.08);
+      box-shadow: 0 0 15px var(--neon-green-glow);
+    }
+    .calendar-day.selected {
+      background: var(--neon-green);
+      color: #052014;
+      font-weight: 700;
+      border-color: var(--neon-green);
+      box-shadow: 0 8px 20px -5px var(--neon-green-glow),
+                  0 0 20px var(--neon-green-soft);
+    }
+    .calendar-day.disabled { opacity: 0.3; cursor: default; }
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .time-slot {
+      padding: 12px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    .time-slot:hover {
+      background: rgba(0, 255, 136, 0.15);
+      border-color: var(--neon-green);
+      color: var(--neon-green);
+      box-shadow: 0 0 15px var(--neon-green-glow);
+      transform: translateY(-2px);
+    }
+    .time-slot.selected {
+      background: var(--neon-green);
+      border-color: var(--neon-green);
+      color: #052014;
+      font-weight: 700;
+      box-shadow: 0 8px 20px -5px var(--neon-green-glow);
+    }
+    .booking-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 18px;
+      font-size: 1.1rem;
+    }
+
+    /* REVIEWS */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-bottom: 80px;
+    }
+    .review-card {
+      padding: 36px 32px;
+      border-radius: 32px;
+      background: rgba(20, 24, 36, 0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.4s ease;
+    }
+    .review-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--neon-green);
+      background: rgba(0, 255, 136, 0.05);
+      box-shadow: 0 25px 50px -15px var(--neon-green-glow);
+    }
+    .review-card:hover .review-stars {
+      text-shadow: 0 0 15px var(--neon-green-glow);
+    }
+    .review-card:hover .review-author img {
+      border-color: var(--neon-green);
+      box-shadow: 0 0 15px var(--neon-green-soft);
+    }
+    .review-stars {
+      color: #ffb800;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      letter-spacing: 3px;
+      transition: text-shadow 0.3s;
+    }
+    .review-text {
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.7;
+      font-style: italic;
+    }
+    .review-author { display: flex; align-items: center; gap: 16px; }
+    .review-author img {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--accent);
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .review-author h4 { font-size: 1rem; font-weight: 600; }
+    .review-author span { font-size: 0.85rem; color: var(--text-secondary); }
+
+    /* RESULTS */
+    .results-header { text-align: center; margin-bottom: 48px; }
+    .results-header h2 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    .results-header h2 span {
+      background: linear-gradient(135deg, #b7a4ff, #7c5cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(124, 92, 255, 0.4));
+    }
+    .results-header p { text-shadow: 0 2px 15px rgba(0, 0, 0, 0.6); }
+    .results-timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      padding: 40px 0;
+    }
+    .results-timeline::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent), transparent);
+      opacity: 0.4;
+      transform: translateY(-50%);
+    }
+    .result-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      cursor: pointer;
+    }
+    .step-letter {
+      width: 70px; height: 70px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-soft);
+      box-shadow: 0 0 30px rgba(124, 92, 255, 0.3);
+      transition: all 0.4s ease;
+      background: linear-gradient(145deg, #141824, #0b0e14);
+    }
+    .result-step:hover .step-letter {
+      transform: scale(1.15);
+      border-color: var(--neon-green);
+      color: #052014;
+      background: var(--neon-green);
+      box-shadow: 0 0 50px var(--neon-green-glow),
+                  0 0 0 4px rgba(0, 255, 136, 0.2);
+    }
+    .result-step:hover p {
+      color: var(--neon-green);
+      text-shadow: 0 0 10px var(--neon-green-glow);
+    }
+    .result-step p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 140px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-secondary);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.9rem;
+      background: rgba(11, 14, 20, 0.6);
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 1024px) {
+      .ocean-bg { background-attachment: scroll; }
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-content p { max-width: 100%; margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-menu { justify-content: center; flex-wrap: wrap; }
+      .about-grid { grid-template-columns: 1fr; text-align: center; }
+      .stats { justify-content: center; }
+      .services-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr 1fr; }
+      .results-timeline { flex-wrap: wrap; gap: 30px; justify-content: center; }
+      .result-step { flex: 0 0 calc(33% - 30px); }
+      .results-timeline::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      section { padding: 70px 0; }
+      .hero-menu { gap: 16px; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .result-step { flex: 0 0 calc(50% - 30px); }
+      .about-text h2, .services-header h2, .results-header h2 { font-size: 2.2rem; }
+      .service-item { flex-wrap: wrap; }
+      .service-price { margin-left: 0; width: 100%; text-align: right; }
+      .hero-actions .btn { width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .result-step { flex: 0 0 100%; }
+      .stats { flex-direction: column; gap: 20px; }
+      .time-slots { grid-template-columns: 1fr 1fr; }
+    }
+
+    .glow-on-hover { transition: box-shadow 0.3s, transform 0.3s; }
+
+    .toast {
+      position: fixed;
+      bottom: 30px; right: 30px;
+      background: rgba(30, 34, 48, 0.95);
+      backdrop-filter: blur(16px);
+      border-left: 6px solid var(--neon-green);
+      padding: 20px 28px;
+      border-radius: 20px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6),
+                  0 0 30px var(--neon-green-soft);
+      transform: translateY(120%);
+      transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      max-width: 380px;
+    }
+    .toast.show { transform: translateY(0); }
+    .toast i { color: var(--neon-green); font-size: 1.8rem; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== ФОН: РАЗМЫТЫЙ ШТОРМОВОЙ ОКЕАН ===== -->
+  <div class="ocean-bg"></div>
+  <div class="ocean-overlay"></div>
+  <div class="ocean-noise"></div>
+
+  <!-- ========== ГЛАВНЫЙ БЛОК (HERO) ========== -->
+  <section class="hero" id="home">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-bg-glow second"></div>
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content fade-up">
+          <div class="promo-badge">
+            <i class="fas fa-gift" style="margin-right: 8px;"></i> Первая сессия −30% до 30 июня
+          </div>
+          <h1>
+            Путь к себе <br>
+            <span>начинается здесь</span>
+          </h1>
+          <p>
+            Елена Вайс — клинический психолог, КПТ-терапевт. Помогу справиться с тревогой, 
+            выгоранием и наладить отношения. Онлайн и офлайн.
+          </p>
+          <div class="hero-actions">
+            <a href="#booking" class="btn btn-primary">
+              <i class="fas fa-calendar-check"></i> Записаться
+            </a>
+            <a href="#about" class="btn btn-outline">
+              <i class="fas fa-user"></i> Обо мне
+            </a>
+          </div>
+          <ul class="hero-menu">
+            <li><a href="#home">Главная</a></li>
+            <li><a href="#about">Обо мне</a></li>
+            <li><a href="#services">Услуги</a></li>
+            <li><a href="#reviews">Отзывы</a></li>
+          </ul>
+        </div>
+        <div class="hero-image fade-up">
+          <div class="photo-glow"></div>
+          <!-- ✅ ФОТО ПСИХОЛОГА (Hero) -->
+          <img 
+            src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=800&q=80&auto=format&fit=crop"
+            alt="Елена Вайс — психолог"
+            class="glow-on-hover"
+            loading="eager"
+            onerror="this.src='https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80&auto=format&fit=crop'"
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== БЛОК 2: ОБ ЭКСПЕРТЕ ========== -->
+  <section id="about" class="about-section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image fade-up">
+          <!-- ✅ ФОТО ПСИХОЛОГА (About) -->
+          <img 
+            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80&auto=format&fit=crop"
+            alt="Елена Вайс в кабинете"
+            loading="lazy"
+            onerror="this.src='https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=80&auto=format&fit=crop'"
+          >
+        </div>
+        <div class="about-text fade-up">
+          <h2><i class="fas fa-brain"></i> Елена Вайс</h2>
+          <p>
+            Клинический психолог, сертифицированный КПТ-терапевт. Окончила МГУ им. Ломоносова, 
+            прошла стажировку в Берлине. Более 10 лет помогаю людям находить опору внутри себя.
+          </p>
+          <p>
+            Моя миссия — сделать психотерапию доступной и безопасной. Работаю с тревогой, 
+            депрессией, выгоранием, отношениями и самооценкой.
+          </p>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="number">10+</div>
+              <div class="label">лет практики</div>
+            </div>
+            <div class="stat-item">
+              <div class="number">1500+</div>
+              <div class="label">клиентов</div>
+            </div>
+            <div class="stat-item">
+              <div class="number">98%</div>
+              <div class="label">довольны результатом</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== БЛОК 3: УСЛУГИ + ОНЛАЙН-ЗАПИСЬ ========== -->
+  <section id="services" class="services-section">
+    <div class="container">
+      <div class="services-header fade-up">
+        <h2>Услуги и онлайн-запись</h2>
+        <p>Выберите подходящий формат — и сразу забронируйте удобное время</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-list fade-up">
+          <div class="service-item glass-card selected" data-service="Индивидуальная консультация" data-price="3500">
+            <div class="service-icon"><i class="fas fa-user"></i></div>
+            <div class="service-info">
+              <h3>Индивидуальная консультация</h3>
+              <p>50 минут · онлайн / офлайн</p>
+            </div>
+            <div class="service-price">3 500 ₽</div>
+          </div>
+          <div class="service-item glass-card" data-service="Парная терапия" data-price="5000">
+            <div class="service-icon"><i class="fas fa-heart"></i></div>
+            <div class="service-info">
+              <h3>Парная терапия</h3>
+              <p>80 минут · онлайн</p>
+            </div>
+            <div class="service-price">5 000 ₽</div>
+          </div>
+          <div class="service-item glass-card" data-service="Групповая терапия" data-price="2500">
+            <div class="service-icon"><i class="fas fa-users"></i></div>
+            <div class="service-info">
+              <h3>Групповая терапия</h3>
+              <p>90 минут · группа до 8 человек</p>
+            </div>
+            <div class="service-price">2 500 ₽</div>
+          </div>
+          <div class="service-item glass-card" data-service="Экспресс-консультация" data-price="1500">
+            <div class="service-icon"><i class="fas fa-bolt"></i></div>
+            <div class="service-info">
+              <h3>Экспресс-консультация</h3>
+              <p>30 минут · онлайн</p>
+            </div>
+            <div class="service-price">1 500 ₽</div>
+          </div>
+        </div>
+
+        <div class="calendar-wrapper glass-card fade-up" id="booking">
+          <div class="calendar-header">
+            <h3><i class="fas fa-calendar-alt" style="color: var(--accent); margin-right: 12px;"></i> Июнь 2025</h3>
+            <div class="calendar-nav">
+              <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+              <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+          <div style="margin-top: 20px;">
+            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 12px;">
+              <i class="fas fa-clock"></i> Доступное время:
+            </p>
+            <div class="time-slots" id="timeSlots"></div>
+          </div>
+          <button class="btn btn-primary booking-btn" id="bookBtn">
+            <i class="fas fa-check-circle"></i> Записаться на сессию
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== БЛОК 4: ОТЗЫВЫ И РЕЗУЛЬТАТЫ ========== -->
+  <section id="reviews" class="reviews-section">
+    <div class="container">
+      <div class="services-header fade-up">
+        <h2>Отзывы клиентов</h2>
+        <p>Реальные истории людей, которые уже прошли путь изменений</p>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card fade-up">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Елена помогла мне справиться с паническими атаками. За 3 месяца работы я вернулась к нормальной жизни. Очень бережный и профессиональный подход.»</p>
+          <div class="review-author">
+            <img 
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&q=80&auto=format&fit=crop&crop=faces"
+              alt="Анна К."
+              loading="lazy"
+              onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&q=80&auto=format&fit=crop&crop=faces'"
+            >
+            <div>
+              <h4>Анна К.</h4>
+              <span>тревожность, 4 месяца</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card fade-up">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Работали с выгоранием. Елена дала конкретные инструменты, которые работают. Уже через месяц я почувствовал прилив сил и желание жить.»</p>
+          <div class="review-author">
+            <img 
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&q=80&auto=format&fit=crop&crop=faces"
+              alt="Дмитрий С."
+              loading="lazy"
+              onerror="this.src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&q=80&auto=format&fit=crop&crop=faces'"
+            >
+            <div>
+              <h4>Дмитрий С.</h4>
+              <span>выгорание, 2 месяца</span>
+            </div>
+          </div>
+        </div>
+        <div class="review-card fade-up">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">«Супружеская терапия спасла наш брак. Мы научились слышать друг друга. Спасибо Елене за чуткость и профессионализм!»</p>
+          <div class="review-author">
+            <img 
+              src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&q=80&auto=format&fit=crop&crop=faces"
+              alt="Мария и Сергей"
+              loading="lazy"
+              onerror="this.src='https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&q=80&auto=format&fit=crop&crop=faces'"
+            >
+            <div>
+              <h4>Мария и Сергей</h4>
+              <span>парная терапия</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-header fade-up">
+        <h2>Результаты <span>от А до Я</span></h2>
+        <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">Путь клиента — от первого запроса до устойчивых изменений</p>
+      </div>
+      <div class="results-timeline fade-up">
+        <div class="result-step">
+          <div class="step-letter">А</div>
+          <p>Осознание проблемы и запрос</p>
+        </div>
+        <div class="result-step">
+          <div class="step-letter">Б</div>
+          <p>Безопасное пространство и доверие</p>
+        </div>
+        <div class="result-step">
+          <div class="step-letter">В</div>
+          <p>Внедрение новых стратегий</p>
+        </div>
+        <div class="result-step">
+          <div class="step-letter">Г</div>
+          <p>Гармония с собой и близкими</p>
+        </div>
+        <div class="result-step">
+          <div class="step-letter">Д</div>
+          <p>Долгосрочные результаты</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 Елена Вайс · Психолог. Все права защищены.</p>
+      <p style="margin-top: 8px; font-size: 0.8rem;">Демо-сайт. Фото предоставлены Unsplash (бесплатная лицензия).</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Вы успешно записаны!</span>
+  </div>
+
+  <script>
+    (function() {
+      // АНИМАЦИЯ ПОЯВЛЕНИЯ
+      const fadeElements = document.querySelectorAll('.fade-up');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      fadeElements.forEach(el => observer.observe(el));
+
+      // ВЫБОР УСЛУГИ
+      const serviceItems = document.querySelectorAll('.service-item');
+      let selectedService = 'Индивидуальная консультация';
+      let selectedPrice = 3500;
+      serviceItems.forEach(item => {
+        item.addEventListener('click', () => {
+          serviceItems.forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          selectedService = item.dataset.service || 'Индивидуальная консультация';
+          selectedPrice = item.dataset.price || 3500;
+        });
+      });
+
+      // КАЛЕНДАРЬ
+      const calendarGrid = document.getElementById('calendarGrid');
+      const timeSlots = document.getElementById('timeSlots');
+      const monthTitle = document.querySelector('.calendar-header h3');
+      const prevBtn = document.getElementById('prevMonth');
+      const nextBtn = document.getElementById('nextMonth');
+
+      let currentYear = 2025;
+      let currentMonth = 5;
+      let selectedDay = 15;
+      let selectedTime = '12:00';
+
+      const availableDays = [3, 5, 10, 12, 15, 17, 19, 22, 24, 26, 29];
+      const allTimeSlots = ['10:00', '11:00', '12:00', '14:00', '15:00', '16:00', '18:00', '19:00'];
+
+      function renderCalendar() {
+        const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        monthTitle.innerHTML = `<i class="fas fa-calendar-alt" style="color: var(--accent); margin-right: 12px;"></i> ${monthNames[currentMonth]} ${currentYear}`;
+
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        let gridHtml = '';
+        ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(name => {
+          gridHtml += `<div class="calendar-day-name">${name}</div>`;
+        });
+        for (let i = 0; i < startOffset; i++) gridHtml += `<div class="calendar-day disabled"></div>`;
+        for (let d = 1; d <= daysInMonth; d++) {
+          const isAvailable = availableDays.includes(d);
+          const isSelected = (d === selectedDay);
+          gridHtml += `<div class="calendar-day ${isAvailable ? '' : 'disabled'} ${isSelected ? 'selected' : ''}" data-day="${d}" ${isAvailable ? '' : 'style="pointer-events: none;"'}>${d}</div>`;
+        }
+        calendarGrid.innerHTML = gridHtml;
+
+        document.querySelectorAll('.calendar-day:not(.disabled)').forEach(dayEl => {
+          dayEl.addEventListener('click', function() {
+            document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedDay = parseInt(this.dataset.day);
+            renderTimeSlots();
+          });
+        });
+      }
+
+      function renderTimeSlots() {
+        const availableSlots = allTimeSlots.filter((slot) => {
+          if (selectedDay % 2 === 0 && slot === '10:00') return false;
+          if (selectedDay % 3 === 0 && slot === '18:00') return false;
+          return true;
+        });
+        if (!availableSlots.includes(selectedTime) && availableSlots.length > 0) {
+          selectedTime = availableSlots[0];
+        }
+        let html = '';
+        availableSlots.forEach(slot => {
+          html += `<div class="time-slot ${slot === selectedTime ? 'selected' : ''}" data-time="${slot}">${slot}</div>`;
+        });
+        timeSlots.innerHTML = html;
+
+        document.querySelectorAll('.time-slot').forEach(slotEl => {
+          slotEl.addEventListener('click', function() {
+            document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedTime = this.dataset.time;
+          });
+        });
+      }
+
+      prevBtn.addEventListener('click', () => { renderCalendar(); renderTimeSlots(); });
+      nextBtn.addEventListener('click', () => { renderCalendar(); renderTimeSlots(); });
+
+      renderCalendar();
+      renderTimeSlots();
+
+      // ЗАПИСЬ
+      const bookBtn = document.getElementById('bookBtn');
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+
+      bookBtn.addEventListener('click', () => {
+        const dayStr = selectedDay < 10 ? '0' + selectedDay : selectedDay;
+        const monthStr = (currentMonth + 1) < 10 ? '0' + (currentMonth + 1) : (currentMonth + 1);
+        const dateFormatted = `${dayStr}.${monthStr}.${currentYear}`;
+        const message = `✅ Вы записаны на "${selectedService}" ${dateFormatted} в ${selectedTime}. Стоимость: ${selectedPrice} ₽.`;
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 5000);
+      });
+
+      // ПЛАВНЫЙ СКРОЛЛ
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === "#" || href === "") return;
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
